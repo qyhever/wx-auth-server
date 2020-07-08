@@ -1,0 +1,30 @@
+{
+  "name": "koa-template",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "cross-env NODE_ENV=development nodemon bin/www",
+    "prod": "cross-env NODE_ENV=production pm2 start bin/www"
+  },
+  "dependencies": {
+    "axios": "^0.19.2",
+    "jsonwebtoken": "^8.5.1",
+    "koa": "^2.7.0",
+    "koa-body": "^4.2.0",
+    "koa-jwt": "^4.0.0",
+    "koa-logger": "^3.2.0",
+    "koa-router": "^7.4.0",
+    "koa-static": "^5.0.0",
+    "module-alias": "^2.2.2",
+    "redis": "^3.0.2",
+    "require-directory": "^2.1.1"
+  },
+  "devDependencies": {
+    "cross-env": "^7.0.2",
+    "nodemon": "^1.19.1"
+  },
+  "_moduleAliases": {
+    "@": "./"
+  }
+}
