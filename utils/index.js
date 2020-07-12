@@ -1,4 +1,4 @@
-function getResponse(...rest) {
+function genResponse(...rest) {
   if (rest.length === 2) {
     const [success, msg] = rest
     return {
@@ -16,5 +16,5 @@ function getResponse(...rest) {
 }
 
 module.exports = {
-  getResponse
+  genResponse
 }

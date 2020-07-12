@@ -1,0 +1,21 @@
+{
+  "name": "api文档",
+  "version": "0.0.0",
+  "description": "wx-auth-server",
+  "title": "api文档",
+  "url" : "http://qyhever.com:4444",
+  "sampleUrl": "http://qyhever.com:4444",
+  "order": [
+    "Upload"
+  ],
+  "template": {
+    "withCompare": true,
+    "withGenerator": true
+  },
+   "header": {
+    "title": "回到底部"
+  },
+  "footer": {
+    "title": "回到顶部"
+  }
+}

@@ -1,9 +1,9 @@
 const commonConfig = {
   privateKey: 'this is prevate key',
   wechat: {
-    appid: 'wx3952f869a002c51e',
-    secret: '84ebb558dc6bcb187d46d8f381f711f0',
-    token: '24a2b38967d62'
+    appid: 'xxx',
+    secret: 'xxx',
+    token: 'xxx'
   }
 }
 
@@ -12,14 +12,14 @@ const config = {
     redis: {
       host: '127.0.0.1',
       port: 6379,
-      password: 'foo'
+      password: 'xxx'
     }
   },
   production: {
     redis: {
-      host: '47.105.103.118',
+      host: 'xxx',
       port: 6379,
-      password: 'foo'
+      password: 'xxx'
     }
   }
 }[process.env.NODE_ENV]

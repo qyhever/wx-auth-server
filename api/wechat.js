@@ -4,7 +4,7 @@ const secret = 'cf3f2dcd023a252c155d8b38ea1d1c39' // 测试号 appsecret
 const config = global.config
 
 // 通过 code 获取 网页授权 access_token
-exports.fetchWebAccessTokenByCode = async code => {
+async function fetchWebAccessTokenByCode(code) {
 	const params = {
 		appid,
 		secret,
@@ -13,29 +13,44 @@ exports.fetchWebAccessTokenByCode = async code => {
 	}
 	const url = 'https://api.weixin.qq.com/sns/oauth2/access_token'
 	const res = await axios.get(url, { params })
-	return res.data
+	const response = res.data
+	const now = +new Date()
+	// expires_in: 默认 7200s，这里提前 60s 好做更新
+	response.expires_in = now + (response.expires_in - 60) * 1000
+	console.log('接口获取 web access_token response', response)
+	return response
 }
 
 // 验证网页授权 access_token 有效性
-exports.validWebAccessToken = async (data, openId) => {
+// async function validWebAccessToken(data, openId) {
+// 	if (!data || !data.access_token) {
+// 		return false
+// 	}
+// 	const url = 'https://api.weixin.qq.com/sns/auth'
+// 	const params = {
+// 		access_token: data.access_token,
+// 		openid: openId
+// 	}
+// 	// 调用接口 验证 web access_token 有效性
+// 	const res = await axios.get(url, { params })
+// 	const response = res.data
+// 	console.log('验证结果 web access_token response', response)
+// 	// errcode === 0，验证通过
+// 	return response.errcode === 0
+// }
+
+function validWebAccessToken(data) {
 	if (!data || !data.access_token || !data.expires_in) {
 		return false
 	}
-	const url = 'https://api.weixin.qq.com/sns/auth'
-	const params = {
-		access_token: data.access_token,
-		openid: openId
-	}
-	// 调用验证接口
-	const res = await axios.get(url, { params })
-	const response = res.data
-	console.log('验证结果', response)
-	// errcode === 0，验证通过
-	return response.errcode === 0
+	const { expires_in } = data
+	const now = +new Date()
+
+	return now < expires_in
 }
 
 // 刷新网页授权 access_token
-exports.refreshWebAccessToken = async (refresh_token) => {
+async function refreshWebAccessToken(refresh_token) {
 	const url = 'https://api.weixin.qq.com/sns/oauth2/refresh_token'
 	const params = {
 		appid,
@@ -47,7 +62,7 @@ exports.refreshWebAccessToken = async (refresh_token) => {
 }
 
 // 获取用户基本信息
-exports.getUserInfo = ({access_token, openid}) => {
+function getUserInfo({access_token, openid}) {
 	const params = {
 		access_token,
 		openid,
@@ -58,7 +73,7 @@ exports.getUserInfo = ({access_token, openid}) => {
 }
 
 // 获取普通 access_token
-exports.fetchAccessToken = async () => {
+async function fetchAccessToken() {
 	const url = 'https://api.weixin.qq.com/cgi-bin/token'
 	const params = {
 		grant_type: 'client_credential',
@@ -69,16 +84,15 @@ exports.fetchAccessToken = async () => {
 	}
 	const res = await axios.get(url, { params })
 	const response = res.data
-	console.log('------------------------------------------')
-	console.log('获取普通 access_token', res.data)
 	const now = +new Date()
 	// expires_in: 默认 7200s，这里提前 60s 好做更新
 	response.expires_in = now + (response.expires_in - 60) * 1000
+	console.log('接口获取 基础 access_token response', response)
 	return response
 }
 
 // 验证普通 access_token 是否过期
-exports.validAccessToken = data => {
+function validAccessToken(data) {
 	if (!data || !data.access_token || !data.expires_in) {
 		return false
 	}
@@ -90,7 +104,7 @@ exports.validAccessToken = data => {
 }
 
 // 通过 普通 access_token 获取 jaspi_ticket
-exports.fetchJsapiTicket = async (access_token) => {
+async function fetchJsapiTicket(access_token) {
 	const url = 'https://api.weixin.qq.com/cgi-bin/ticket/getticket'
 	const params = {
 		access_token,
@@ -98,16 +112,15 @@ exports.fetchJsapiTicket = async (access_token) => {
 	}
 	const res = await axios.get(url, { params })
 	const response = res.data
-	console.log('------------------------------------------')
-	console.log('获取 japi_ticket', res.data)
 	const now = +new Date()
 	// expires_in: 默认 7200s，这里提前 60s 好做更新
 	response.expires_in = now + (response.expires_in - 60) * 1000
+	console.log('接口获取 jsapi_ticket response', response)
 	return response
 }
 
 // 验证 ticket 是否过期
-exports.validJsapiTicket = data => {
+function validJsapiTicket(data) {
 	if (!data || !data.ticket || !data.expires_in) {
 		return false
 	}
@@ -116,4 +129,16 @@ exports.validJsapiTicket = data => {
 	const now = +new Date()
 
 	return now < expires_in
+}
+
+module.exports = {
+	appid,
+	fetchWebAccessTokenByCode,
+	validWebAccessToken,
+	refreshWebAccessToken,
+	getUserInfo,
+	fetchAccessToken,
+	validAccessToken,
+	fetchJsapiTicket,
+	validJsapiTicket
 }
