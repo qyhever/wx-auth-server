@@ -18,7 +18,7 @@
     "koa-router": "^7.4.0",
     "koa-static": "^5.0.0",
     "module-alias": "^2.2.2",
-    "redis": "^2.8.0",
+    "redis": "^3.1.1",
     "require-directory": "^2.1.1",
     "sha1": "^1.1.1"
   },
